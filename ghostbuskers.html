@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghostbuskers – Everyone Joins The Band</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ghost-white: #F5F0E8;
+    --ghost-cream: #EDE5D0;
+    --ink: #1A1A18;
+    --red: #C8392B;
+    --gold: #D4A827;
+    --muted: #7A7165;
+    --paper: #FAF7F0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: var(--ink);
+    border-bottom: 3px solid var(--gold);
+  }
+
+  .nav-logo {
+    font-family: 'Permanent Marker', cursive;
+    color: var(--ghost-white);
+    font-size: 1.4rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+  .nav-links a {
+    color: var(--ghost-cream);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--red);
+    color: white !important;
+    padding: 0.45rem 1.2rem;
+    border-radius: 2px;
+  }
+  .nav-cta:hover { background: #a82e20; color: white !important; }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .hamburger span { display: block; width: 26px; height: 2px; background: var(--ghost-white); transition: all 0.3s; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* animated ghost silhouettes */
+  .ghost-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .ghost-float {
+    position: absolute;
+    font-size: 5rem;
+    opacity: 0.04;
+    animation: floatGhost 8s ease-in-out infinite;
+    filter: blur(1px);
+  }
+  .ghost-float:nth-child(1) { top: 10%; left: 8%; animation-delay: 0s; font-size: 4rem; }
+  .ghost-float:nth-child(2) { top: 60%; left: 75%; animation-delay: 2s; font-size: 7rem; }
+  .ghost-float:nth-child(3) { top: 30%; left: 55%; animation-delay: 4s; font-size: 3rem; }
+  .ghost-float:nth-child(4) { top: 75%; left: 20%; animation-delay: 1s; font-size: 6rem; }
+  .ghost-float:nth-child(5) { top: 15%; left: 85%; animation-delay: 3s; font-size: 5rem; }
+
+  @keyframes floatGhost {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-20px) rotate(3deg); }
+  }
+
+  /* stave lines */
+  .stave {
+    position: absolute; left: 0; right: 0;
+    height: 1px; background: rgba(255,255,255,0.04);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: clamp(3.5rem, 12vw, 9rem);
+    color: var(--ghost-white);
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.15s ease forwards;
+    opacity: 0;
+  }
+  .hero-title .ghost { color: var(--gold); display: block; }
+
+  .hero-tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1rem, 3.5vw, 1.8rem);
+    color: var(--ghost-cream);
+    letter-spacing: 0.15em;
+    max-width: 680px;
+    line-height: 1.4;
+    animation: fadeUp 0.8s 0.3s ease forwards;
+    opacity: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    animation: fadeUp 0.8s 0.45s ease forwards;
+    opacity: 0;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-usp {
+    display: inline-block;
+    border: 1px solid rgba(212, 168, 39, 0.4);
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.55s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-buttons {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.8s 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: white;
+    padding: 0.9rem 2.2rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: transform 0.2s, background 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #a82e20; transform: translateY(-2px); }
+
+  .btn-secondary {
+    border: 1px solid rgba(245,240,232,0.35);
+    color: var(--ghost-white);
+    padding: 0.9rem 2.2rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    animation: bounce 2s ease-in-out infinite;
+    color: rgba(245,240,232,0.3);
+    font-size: 1.2rem;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)} }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 5rem 2rem; }
+
+  .section-inner { max-width: 1080px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    letter-spacing: 0.05em;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ─── ABOUT ─── */
+  #about { background: var(--ghost-cream); }
+
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+
+  .about-text p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #333;
+    margin-bottom: 1.2rem;
+  }
+
+  .about-text p strong { color: var(--red); }
+
+  .about-facts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+
+  .fact-card {
+    background: var(--ink);
+    color: var(--ghost-white);
+    padding: 1.5rem;
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fact-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .fact-card .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .fact-card .label {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  #how {
+    background: var(--ink);
+    color: var(--ghost-white);
+  }
+
+  #how .section-title { color: var(--ghost-white); }
+
+  .steps {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem;
+  }
+
+  .step {
+    position: relative;
+    padding: 2rem 1.5rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+    transition: border-color 0.3s;
+  }
+  .step:hover { border-color: var(--gold); }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: rgba(212,168,39,0.15);
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .step h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+  .step p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.7);
+  }
+
+  .step-arrow {
+    display: none;
+  }
+
+  /* ─── GIGS ─── */
+  #gigs { background: var(--paper); }
+
+  .gigs-list { margin-top: 2.5rem; }
+
+  .gig-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid rgba(26,26,24,0.1);
+    transition: background 0.2s;
+  }
+  .gig-item:first-child { border-top: 1px solid rgba(26,26,24,0.1); }
+
+  .gig-date {
+    text-align: center;
+  }
+  .gig-date .day {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    line-height: 1;
+    color: var(--red);
+  }
+  .gig-date .month {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .gig-date .year {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .gig-info h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+  .gig-info p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .gig-info .time {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    margin-top: 0.5rem;
+  }
+
+  .gig-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid rgba(26,26,24,0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .no-gigs {
+    text-align: center; padding: 3rem; color: var(--muted); font-style: italic;
+  }
+
+  /* ─── BOOK ─── */
+  #book {
+    background: var(--red);
+    color: white;
+    text-align: center;
+  }
+  #book .section-label { color: rgba(255,255,255,0.6); }
+  #book .section-title { color: white; }
+
+  .book-body {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .book-body p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .book-contacts {
+    display: flex; flex-direction: column; gap: 1rem; align-items: center; margin-bottom: 2.5rem;
+  }
+  .contact-line {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-size: 1rem; color: white;
+  }
+  .contact-line a { color: white; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.4); }
+  .contact-line a:hover { border-color: white; }
+  .contact-icon { font-size: 1.1rem; opacity: 0.7; }
+
+  .btn-light {
+    background: white;
+    color: var(--red);
+    padding: 0.9rem 2.2rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-light:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+  /* ─── JOIN ─── */
+  #join { background: var(--ghost-cream); }
+
+  .join-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+  }
+
+  .join-info p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 1rem;
+  }
+
+  .join-details {
+    background: var(--ink);
+    color: var(--ghost-white);
+    padding: 2rem;
+    border-radius: 3px;
+  }
+  .join-details h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .detail-row {
+    display: flex; gap: 1rem; align-items: flex-start;
+    margin-bottom: 1.2rem;
+  }
+  .detail-icon { font-size: 1rem; margin-top: 0.1rem; opacity: 0.6; flex-shrink: 0; }
+  .detail-text { font-size: 0.9rem; line-height: 1.6; color: rgba(245,240,232,0.8); }
+  .detail-text strong { color: var(--ghost-white); }
+
+  .faq { margin-top: 2.5rem; }
+  .faq-item { border-bottom: 1px solid rgba(26,26,24,0.12); }
+  .faq-q {
+    width: 100%; background: none; border: none; text-align: left;
+    padding: 1.1rem 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--red); }
+  .faq-q .chevron { transition: transform 0.3s; font-size: 0.8rem; color: var(--muted); }
+  .faq-item.open .faq-q .chevron { transform: rotate(180deg); }
+  .faq-a {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-bottom: 1.1rem; }
+
+  /* ─── DONATE ─── */
+  #donate {
+    background: var(--ink);
+    color: var(--ghost-white);
+    text-align: center;
+  }
+  #donate .section-title { color: var(--ghost-white); }
+
+  .donate-body {
+    max-width: 620px; margin: 0 auto;
+  }
+  .donate-body p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.75);
+    margin-bottom: 1.5rem;
+  }
+
+  .donate-amounts {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;
+  }
+  .donate-amount {
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--ghost-white);
+    padding: 0.7rem 1.5rem;
+    border-radius: 2px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: none;
+  }
+  .donate-amount:hover,
+  .donate-amount.active { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+  .donate-note {
+    font-size: 0.8rem !important;
+    color: rgba(245,240,232,0.4) !important;
+    margin-top: 1rem !important;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #111;
+    color: rgba(245,240,232,0.5);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2rem;
+    color: var(--ghost-white);
+    margin-bottom: 0.3rem;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .social-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; }
+  .social-links a {
+    color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .social-links a:hover { color: var(--gold); }
+  .footer-meta {
+    font-size: 0.75rem;
+    line-height: 1.8;
+  }
+  .footer-meta a { color: rgba(245,240,232,0.4); text-decoration: none; }
+  .footer-meta a:hover { color: var(--gold); }
+  .footer-divider { width: 40px; height: 1px; background: rgba(255,255,255,0.1); margin: 1.5rem auto; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .nav-links.open {
+      display: flex; flex-direction: column; gap: 0;
+      position: fixed; top: 60px; left: 0; right: 0;
+      background: var(--ink); padding: 1rem 2rem 2rem;
+      border-bottom: 2px solid var(--gold);
+    }
+    .nav-links.open li { padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .about-grid, .join-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-facts { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .gig-item { grid-template-columns: 80px 1fr; }
+    .gig-tag { display: none; }
+    section { padding: 4rem 1.5rem; }
+  }
+  @media (max-width: 480px) {
+    .steps { grid-template-columns: 1fr; }
+    .about-facts { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Ghost<span>buskers</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#gigs">Gigs</a></li>
+    <li><a href="#join">Join</a></li>
+    <li><a href="#book">Book Us</a></li>
+    <li><a href="#donate" class="nav-cta">Donate</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="ghost-bg">
+    <div class="ghost-float">👻</div>
+    <div class="ghost-float">🎵</div>
+    <div class="ghost-float">👻</div>
+    <div class="ghost-float">🎶</div>
+    <div class="ghost-float">👻</div>
+    <div class="stave" style="top:20%"></div>
+    <div class="stave" style="top:30%"></div>
+    <div class="stave" style="top:40%"></div>
+    <div class="stave" style="top:50%"></div>
+    <div class="stave" style="top:60%"></div>
+  </div>
+
+  <p class="hero-eyebrow">Colwyn Bay, North Wales &nbsp;·&nbsp; Est. 2008</p>
+
+  <h1 class="hero-title">
+    <span>Ghost</span><span class="ghost">buskers</span>
+  </h1>
+
+  <p class="hero-tagline">We start with an audience.<br>We end without one.</p>
+  <p class="hero-sub">Not because everyone has left — but because everyone has joined the band.</p>
+
+  <span class="hero-usp">✦ Community Music · All Ages · All Abilities ✦</span>
+
+  <div class="hero-buttons">
+    <a href="#join" class="btn-primary">Become a Ghostbusker</a>
+    <a href="#gigs" class="btn-secondary">Upcoming Gigs ↓</a>
+  </div>
+
+  <div class="scroll-hint">↓</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-label">Who We Are</span>
+        <h2 class="section-title">Music Is For Everyone</h2>
+        <p>Ghostbuskers is a community music project based in Colwyn Bay, run by <strong>TAPE Community Music and Film</strong>. We perform at public events — streets, parks, festivals — and our performances have a twist: they don't end when the music stops. They end when the audience becomes part of the band.</p>
+        <p>Whether you've played music all your life or you've never picked up an instrument, you are welcome here. Our "Gooboos" come from every background, every age, every ability. There are no auditions. There is no wrong way to join in.</p>
+        <p>We meet every Wednesday, 6–7pm at TAPE in Old Colwyn — and online via Zoom for those who can't make it in person. Sessions are <strong>pay as you feel</strong> (suggested £2).</p>
+        <br>
+        <a href="#join" class="btn-primary">How to Join →</a>
+      </div>
+      <div class="about-facts">
+        <div class="fact-card">
+          <span class="num">Every<br>Wed</span>
+          <span class="label">Weekly Rehearsals</span>
+        </div>
+        <div class="fact-card">
+          <span class="num">All<br>Ages</span>
+          <span class="label">No Experience Needed</span>
+        </div>
+        <div class="fact-card">
+          <span class="num">£2</span>
+          <span class="label">Pay As You Feel</span>
+        </div>
+        <div class="fact-card">
+          <span class="num">Since<br>2008</span>
+          <span class="label">Part of TAPE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-inner">
+    <span class="section-label" style="color:var(--gold)">The Ghostbuskers Way</span>
+    <h2 class="section-title">How A Gig Works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <h3>We Show Up</h3>
+        <p>We arrive at a public place — a street, a park, a festival — with our instruments and our songbooks.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <h3>You Watch</h3>
+        <p>A crowd gathers. People stop, listen, enjoy the music. A normal beginning.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <h3>You Join In</h3>
+        <p>We hand out songbooks and instruments. One by one, the audience becomes the band.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <h3>No More Audience</h3>
+        <p>By the end, everyone is playing. There are no spectators — only musicians.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GIGS -->
+<section id="gigs">
+  <div class="section-inner">
+    <span class="section-label">Live Dates</span>
+    <h2 class="section-title">Upcoming Gigs</h2>
+
+    <div class="gigs-list" id="gigsList">
+      <!-- Gigs are rendered by JS below -->
+    </div>
+
+    <p style="margin-top:2rem; font-size:0.85rem; color:var(--muted)">
+      Want to be notified about new gigs? <a href="https://www.facebook.com/groups/125126777532384" target="_blank" style="color:var(--red)">Join our Facebook group →</a>
+    </p>
+  </div>
+</section>
+
+<!-- BOOK -->
+<section id="book">
+  <div class="section-inner">
+    <div class="book-body">
+      <span class="section-label">Hire Us</span>
+      <h2 class="section-title">Book The Ghostbuskers</h2>
+      <p>Looking for something truly different for your event? We perform at festivals, street events, community celebrations, care homes, schools, and more. Every performance turns your audience into participants — guaranteed smiles and sing-alongs included.</p>
+      <div class="book-contacts">
+        <div class="contact-line">
+          <span class="contact-icon">✉</span>
+          <a href="mailto:ghostbuskers@tapemusicandfilm.co.uk">ghostbuskers@tapemusicandfilm.co.uk</a>
+        </div>
+        <div class="contact-line">
+          <span class="contact-icon">☎</span>
+          <a href="tel:01492512109">01492 512109</a>
+        </div>
+      </div>
+      <a href="mailto:ghostbuskers@tapemusicandfilm.co.uk" class="btn-light">Send Us A Message</a>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="section-inner">
+    <div class="join-grid">
+      <div class="join-info">
+        <span class="section-label">Get Involved</span>
+        <h2 class="section-title">Become A Ghostbusker</h2>
+        <p>Join the group, say hi, and we'll send you a <strong>songbook</strong> and an invite to our weekly rehearsals. That's honestly all there is to it.</p>
+        <p>No auditions. No music reading required. No minimum commitment. Just come along, make some noise, and be part of something lovely.</p>
+
+        <div class="faq" id="faq">
+          <div class="faq-item">
+            <button class="faq-q">Do I need any experience? <span class="chevron">▾</span></button>
+            <div class="faq-a">None at all. Our Gooboos have many different musical backgrounds — whether you've played all your life or are picking up an instrument for the first time, you will be made very welcome.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">How much does it cost? <span class="chevron">▾</span></button>
+            <div class="faq-a">Ghostbuskers is "pay as you feel" with a suggested donation of £2 per rehearsal. No one is turned away for lack of funds.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Where are rehearsals? <span class="chevron">▾</span></button>
+            <div class="faq-a">We rehearse at TAPE Community Music and Film, Berthes Road, Old Colwyn, Colwyn Bay LL29 9SD — and online via Zoom for those who can't make it in person.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Can I bring my kids? <span class="chevron">▾</span></button>
+            <div class="faq-a">Absolutely. Ghostbuskers is for all ages. Families are very welcome.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Do I need to travel for gigs? <span class="chevron">▾</span></button>
+            <div class="faq-a">Gigs are mostly in North Wales. We're happy to help coordinate travel for those who need it — just ask.</div>
+          </div>
+        </div>
+
+        <br>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="https://www.facebook.com/groups/125126777532384" target="_blank" class="btn-primary">Join Facebook Group</a>
+          <a href="mailto:ghostbuskers@tapemusicandfilm.co.uk" class="btn-secondary" style="border-color:rgba(26,26,24,0.3);color:var(--ink)">Email Us To Join</a>
+        </div>
+      </div>
+      <div>
+        <div class="join-details">
+          <h3>Rehearsal Details</h3>
+          <div class="detail-row">
+            <span class="detail-icon">📅</span>
+            <div class="detail-text"><strong>Every Wednesday</strong><br>6:00 – 7:00 PM</div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">📍</span>
+            <div class="detail-text"><strong>TAPE Community Music and Film</strong><br>Berthes Road, Old Colwyn<br>Colwyn Bay, LL29 9SD</div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">💻</span>
+            <div class="detail-text"><strong>Also on Zoom</strong><br>Join us online if you can't be there in person</div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">🎵</span>
+            <div class="detail-text"><strong>Songbook provided</strong><br>We'll send you everything you need</div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">💛</span>
+            <div class="detail-text"><strong>Pay as you feel</strong><br>Suggested £2 per session</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DONATE -->
+<section id="donate">
+  <div class="section-inner">
+    <div class="donate-body">
+      <span class="section-label" style="color:var(--gold)">Support Us</span>
+      <h2 class="section-title">Keep The Music Free</h2>
+      <p>Ghostbuskers is run with love and very little money. We're a community project with no regular funding — your donations directly pay for instruments, equipment, songbooks, and making sure no one is ever priced out of joining in.</p>
+      <p>Every pound helps us reach more people, perform at more places, and keep music truly open to everyone.</p>
+
+      <div class="donate-amounts">
+        <button class="donate-amount" onclick="selectAmount(this, 2)">£2</button>
+        <button class="donate-amount" onclick="selectAmount(this, 5)">£5</button>
+        <button class="donate-amount active" onclick="selectAmount(this, 10)">£10</button>
+        <button class="donate-amount" onclick="selectAmount(this, 25)">£25</button>
+      </div>
+
+      <a href="https://tapemusicandfilm.co.uk/donate/" target="_blank" class="btn-primary" id="donateBtn" style="font-size:1rem;padding:1rem 2.5rem;">
+        Donate £10 →
+      </a>
+      <p class="donate-note">Via TAPE Community Music &amp; Film · Charity No. 1151513</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ghost<span>buskers</span></div>
+  <p class="footer-tagline">Everyone Joins The Band</p>
+  <div class="social-links">
+    <a href="https://www.facebook.com/groups/125126777532384" target="_blank">Facebook Group</a>
+    <a href="https://www.facebook.com/TAPECommunityMusicandFilm" target="_blank">TAPE Facebook</a>
+    <a href="https://www.instagram.com/tapemusicandfilm/" target="_blank">Instagram</a>
+    <a href="https://twitter.com/tapeartscentre" target="_blank">Twitter/X</a>
+    <a href="https://www.tiktok.com/@tapemusicandfilm" target="_blank">TikTok</a>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-meta">
+    Part of <a href="https://tapemusicandfilm.co.uk" target="_blank">TAPE Community Music and Film</a><br>
+    Berthes Road, Old Colwyn, Colwyn Bay LL29 9SD<br>
+    <a href="tel:01492512109">01492 512109</a> · <a href="mailto:ghostbuskers@tapemusicandfilm.co.uk">ghostbuskers@tapemusicandfilm.co.uk</a><br><br>
+    Charity No. 1151513
+  </div>
+</footer>
+
+<script>
+// ─── GIGS DATA (edit this to update gigs) ───
+const gigs = [
+  {
+    date: new Date('2025-05-03'),
+    title: "T4CB Repair Cafe – VE Day 80th Anniversary",
+    venue: "St Paul's Church, Abergele Road, Colwyn Bay",
+    times: ["1:00 PM"],
+    tag: "Community Event"
+  },
+  {
+    date: new Date('2025-05-03'),
+    title: "Llandudno Extravaganza",
+    venue: "St George's Place (Main Street), Llandudno",
+    times: ["3:00 PM", "4:45 PM"],
+    tag: "Festival"
+  }
+];
+
+// render gigs
+const list = document.getElementById('gigsList');
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+if (gigs.length === 0) {
+  list.innerHTML = '<p class="no-gigs">No gigs currently scheduled — check back soon or follow us on Facebook for updates.</p>';
+} else {
+  gigs.forEach(g => {
+    const d = g.date;
+    list.innerHTML += `
+      <div class="gig-item">
+        <div class="gig-date">
+          <div class="day">${d.getDate()}</div>
+          <div class="month">${months[d.getMonth()]}</div>
+          <div class="year">${d.getFullYear()}</div>
+        </div>
+        <div class="gig-info">
+          <h3>${g.title}</h3>
+          <p>${g.venue}</p>
+          ${g.times.map(t => `<span class="time">${t}</span>`).join(' ')}
+        </div>
+        <div class="gig-tag">${g.tag}</div>
+      </div>`;
+  });
+}
+
+// ─── FAQ ───
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ─── HAMBURGER ───
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ─── DONATE AMOUNTS ───
+let selectedAmount = 10;
+function selectAmount(el, amount) {
+  selectedAmount = amount;
+  document.querySelectorAll('.donate-amount').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('donateBtn').textContent = `Donate £${amount} →`;
+}
+
+// ─── SCROLL REVEAL ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.step, .fact-card, .gig-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
